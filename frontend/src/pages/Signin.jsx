@@ -6,6 +6,7 @@ import SubHeading from "../components/SubHeading";
 import InputBox from "../components/InputBox";
 import Button from "../components/Button";
 import BottomWarning from "../components/BottomWarning";
+import Appbar from "../components/Appbar";
 
 const Signin = () => {
   const [username, setUsername] = useState("");
@@ -30,15 +31,23 @@ const Signin = () => {
           <div className="pt-4">
             <Button
               onClick={async () => {
-                const response = await axios.post(
-                  "http://localhost:3000/api/v1/user/signin",
-                  {
-                    username,
-                    password,
-                  }
-                );
-                localStorage.setItem("token", response.data.token);
-                navigate("/dashboard");
+                try {
+                  const response = await axios.post(
+                    "http://localhost:3000/api/v1/user/signin",
+                    {
+                      username,
+                      password,
+                    }
+                  );
+
+                  localStorage.setItem("token", response.data.token);
+                  navigate("/dashboard");
+                } catch (error) {
+                  console.error(
+                    "Error signing in",
+                    error.response ? error.response.data : error.message
+                  );
+                }
               }}
               label={"Sign In"}
             />
